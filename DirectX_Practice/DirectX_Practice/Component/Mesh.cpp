@@ -1,6 +1,7 @@
 #include "Mesh.h"
 #include "../Camera.h"
 #include "../Direct3D11.h"
+#include "../Game.h"
 
 Mesh::Mesh() {
     ZeroMemory(this, sizeof(Mesh));
@@ -106,7 +107,8 @@ HRESULT Mesh::InitShader() {
     ID3D10Blob* pCompiledShader = NULL;
     ID3D10Blob* pErrors = NULL;
     //ブロブからバーテックスシェーダー作成
-    if (FAILED(D3DX11CompileFromFile(L"./Shader/Mesh.hlsl", NULL, NULL, "VS", "vs_5_0", 0, 0, NULL, &pCompiledShader, &pErrors, NULL))) {
+    setShaderDirectory();
+    if (FAILED(D3DX11CompileFromFile(L"Mesh.hlsl", NULL, NULL, "VS", "vs_5_0", 0, 0, NULL, &pCompiledShader, &pErrors, NULL))) {
         MessageBox(0, L"hlsl読み込み失敗", NULL, MB_OK);
         return E_FAIL;
     }
@@ -130,7 +132,7 @@ HRESULT Mesh::InitShader() {
         return FALSE;
     }
     //ブロブからピクセルシェーダー作成
-    if (FAILED(D3DX11CompileFromFile(L"./Shader/Mesh.hlsl", NULL, NULL, "PS", "ps_5_0", 0, 0, NULL, &pCompiledShader, &pErrors, NULL))) {
+    if (FAILED(D3DX11CompileFromFile(L"Mesh.hlsl", NULL, NULL, "PS", "ps_5_0", 0, 0, NULL, &pCompiledShader, &pErrors, NULL))) {
         MessageBox(0, L"hlsl読み込み失敗", NULL, MB_OK);
         return E_FAIL;
     }
@@ -241,6 +243,7 @@ HRESULT Mesh::LoadStaticMesh(std::string fileName) {
 
     char key[200] = { 0 };
     //OBJファイルを開いて内容を読み込む
+    setAssetsDirectory();
     FILE* fp = NULL;
     fopen_s(&fp, fileName.c_str(), "rt");
 

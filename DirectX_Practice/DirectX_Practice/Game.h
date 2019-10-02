@@ -12,7 +12,7 @@
 #define MFALSE(code,string) if(!(code) ) { MessageBox(0, string, L"error",MB_OK); return E_FAIL; }
 #define MSG(t) MessageBox(0, t, 0, MB_OK);
 
-class GamePlay;
+class Main;
 
 class Game {
 public:
@@ -33,5 +33,11 @@ private:
     HWND mHwnd;
     Direct3D11* mD3D11;
 
-    GamePlay* mGamePlay;
+    Main* mMain;
 };
+
+//プロトタイプ
+void initDirectory(WCHAR* root);
+void setRootDirectory();
+void setAssetsDirectory();
+void setShaderDirectory();

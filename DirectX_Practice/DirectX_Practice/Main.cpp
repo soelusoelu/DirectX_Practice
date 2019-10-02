@@ -1,16 +1,17 @@
-#include <Windows.h>
-#include "Game.h"
+#include "Main.h"
+#include "Scene/GamePlay.h"
 
-INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, INT) {
-    Game* game = new Game();
-    if (game == nullptr) {
-        MessageBox(0, L"クラス生成失敗 アプリを終了します", NULL, MB_OK);
-        return 0;
-    }
+Main::Main() :
+    mGamePlay(std::make_unique<GamePlay>()) {
+}
 
-    game->run(hInstance);
+Main::~Main() {
+}
 
-    delete game;
+void Main::update() {
+    mGamePlay->update();
+}
 
-    return 0;
+void Main::draw() const {
+    mGamePlay->draw();
 }

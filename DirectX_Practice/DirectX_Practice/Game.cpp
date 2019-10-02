@@ -1,23 +1,28 @@
 #include "Game.h"
+#include "Main.h"
 #include "Component/Mesh.h"
 #include "Scene/GamePlay.h"
 #include "Utility/Input.h"
+#include "Utility/Singleton.h"
+
+WCHAR szRootPath[1024] = { 0 };
 
 Game::Game() {
     ZeroMemory(this, sizeof(Game));
 }
 
 Game::~Game() {
-    SAFE_DELETE(mGamePlay);
+    SingletonFinalizer::finalize();
+
+    SAFE_DELETE(mMain);
     SAFE_DELETE(mD3D11);
     SAFE_DELETE(mWindow);
 }
 
 void Game::run(HINSTANCE hInstance) {
-    WCHAR szRootPath[1024] = { 0 };
     WCHAR dir[1024];
     GetCurrentDirectory(sizeof(dir), dir);
-    wcsncpy_s(szRootPath, dir, wcslen(dir));
+    initDirectory(dir);
 
     mInstance = hInstance;
     if (FAILED(init())) {
@@ -56,9 +61,9 @@ HRESULT Game::init() {
     di.mHwnd = mHwnd;
     MFAIL(mD3D11->init(&di), L"Direct3D‰Šú‰»Ž¸”s");
 
-    Input::init(mHwnd);
+    MFAIL(Input::init(mHwnd), L"DirectInput‰Šú‰»Ž¸”s");
 
-    mGamePlay = new GamePlay();
+    mMain = new Main();
 
     ////camera
     //m_pCamera = new CAMERA;
@@ -109,8 +114,8 @@ void Game::mainLoop() {
 
     Input::update();
 
-    mGamePlay->update();
-    mGamePlay->draw();
+    mMain->update();
+    mMain->draw();
 
     fixFPS60();
     mD3D11->present();
@@ -131,4 +136,26 @@ void Game::fixFPS60() {
         time *= 1000.0 / (DOUBLE)frq.QuadPart;
     }
     previousTime = currentTime;
+}
+
+void initDirectory(WCHAR* root) {
+    wcsncpy_s(szRootPath, root, wcslen(root));
+}
+
+void setRootDirectory() {
+    SetCurrentDirectory(szRootPath);
+}
+
+void setAssetsDirectory() {
+    WCHAR tmp[1024] = { 0 };
+    wcsncpy_s(tmp, szRootPath, wcslen(szRootPath));
+    wcscat_s(tmp, L"\\Assets");
+    SetCurrentDirectory(tmp);
+}
+
+void setShaderDirectory() {
+    WCHAR tmp[1024] = { 0 };
+    wcsncpy_s(tmp, szRootPath, wcslen(szRootPath));
+    wcscat_s(tmp, L"\\Shader");
+    SetCurrentDirectory(tmp);
 }

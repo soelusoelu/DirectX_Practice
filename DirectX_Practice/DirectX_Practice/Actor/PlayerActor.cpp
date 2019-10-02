@@ -6,7 +6,7 @@
 PlayerActor::PlayerActor(const char* tag) :
     Actor(tag),
     mPlayerMove(new PlayerMoveComponent(this)),
-    mMesh(new MeshComponent(this, "./Assets/Chips.obj")) {
+    mMesh(new MeshComponent(this, "Chips.obj")) {
 }
 
 void PlayerActor::updateActor() {
