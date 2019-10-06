@@ -13,6 +13,7 @@ public:
     virtual void update() override;
     void draw(Matrix4 world) const;
 
+    std::shared_ptr<Mesh> getMesh() const;
     void setEnable(bool set);
     bool getEnable() const;
 

@@ -18,7 +18,7 @@ void ActorManager::update() {
     mUpdatingActors = false;
 
     for (auto&& pending : mPendingActors) {
-        mActors.emplace(pending);
+        divideActor(pending);
     }
     mPendingActors.clear();
 
@@ -26,17 +26,21 @@ void ActorManager::update() {
 }
 
 void ActorManager::draw() const {
+    for (const auto& field : mFieldActors) {
+        field->drawActor();
+    }
     for (const auto& actor : mActors) {
         actor->drawActor();
     }
 }
 
 void ActorManager::addActor(Actor* actor) {
-    if (mUpdatingActors) {
-        mPendingActors.emplace(actor);
-    } else {
-        mActors.emplace(actor);
-    }
+    //if (mUpdatingActors) {
+    //    mPendingActors.emplace(actor);
+    //} else {
+    //    mActors.emplace(actor);
+    //}
+    mPendingActors.emplace(actor);
     //最初に必ず座標計算
     actor->computeWorldTransform();
 }
@@ -44,6 +48,10 @@ void ActorManager::addActor(Actor* actor) {
 void ActorManager::clear() {
     mPendingActors.clear();
     mActors.clear();
+}
+
+std::unordered_set<std::shared_ptr<Actor>> ActorManager::getFields() const {
+    return mFieldActors;
 }
 
 std::shared_ptr<PlayerActor> ActorManager::getPlayer() const {
@@ -56,6 +64,14 @@ std::shared_ptr<PlayerActor> ActorManager::getPlayer() const {
     }
     //最後まで見つからなければnullptrを返す
     return p;
+}
+
+void ActorManager::divideActor(std::shared_ptr<Actor> actor) {
+    if (actor->getTag() == "Field") {
+        mFieldActors.emplace(actor);
+    } else {
+        mActors.emplace(actor);
+    }
 }
 
 void ActorManager::removeDeadActor() {

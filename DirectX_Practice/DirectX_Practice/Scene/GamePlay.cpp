@@ -1,7 +1,9 @@
 ﻿#include "GamePlay.h"
 #include "../Actor/ActorManager.h"
+#include "../Actor/FieldActor.h"
 #include "../Actor/PlayerActor.h"
 #include "../Camera.h"
+#include "../Component/TransformComponent.h"
 #include "../System/GameSystem.h"
 #include "../UI/Pause.h"
 #include "../UI/UIManager.h"
@@ -10,7 +12,9 @@
 GamePlay::GamePlay() :
     SceneBase(),
     mState(GameState::Play) {
-    Actor::instantiate<PlayerActor>();
+    auto p = Actor::instantiate<PlayerActor>();
+    p->getTransform()->setPosition(Vector3(0.f, 10.f, 0.f));
+    Actor::instantiate<FieldActor>();
 }
 
 GamePlay::~GamePlay() {
@@ -35,7 +39,7 @@ void GamePlay::update() {
 void GamePlay::draw() const {
     Singleton<ActorManager>::instance().draw();
     Singleton<UIManager>::instance().draw();
-    Singleton<Camera>::instance().update(/*Singleton<ActorManager>::instance().getPlayer()*/);
+    Singleton<Camera>::instance().update(Singleton<ActorManager>::instance().getPlayer());
 }
 
 GamePlay::GameState GamePlay::getState() const {

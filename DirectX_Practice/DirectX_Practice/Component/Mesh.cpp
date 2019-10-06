@@ -18,9 +18,12 @@ Mesh::~Mesh() {
     SAFE_RELEASE(m_pVertexLayout);
     SAFE_RELEASE(m_pSampleLinear);
     SAFE_RELEASE(m_pTexture);
+    SAFE_DELETE_ARRAY(pvVertexBuffer);
+    SAFE_DELETE_ARRAY(ppiVertexIndex);
+    SAFE_DELETE_ARRAY(dwNumFaceInMaterial);
 }
 
-HRESULT Mesh::Init(std::string fileName) {
+HRESULT Mesh::Init(const std::string& fileName) {
     m_pDevice = Direct3D11::mDevice;
     m_pDeviceContext = Direct3D11::mDeviceContext;
 
@@ -168,7 +171,7 @@ HRESULT Mesh::InitShader() {
     return S_OK;
 }
 
-HRESULT Mesh::LoadMaterialFromFile(std::string fileName, MY_MATERIAL** ppMaterial) {
+HRESULT Mesh::LoadMaterialFromFile(const std::string& fileName, MY_MATERIAL** ppMaterial) {
     //マテリアルファイルを開いて内容を読み込む
     FILE* fp = NULL;
     fopen_s(&fp, fileName.c_str(), "rt");
@@ -231,7 +234,7 @@ HRESULT Mesh::LoadMaterialFromFile(std::string fileName, MY_MATERIAL** ppMateria
     return S_OK;
 }
 
-HRESULT Mesh::LoadStaticMesh(std::string fileName) {
+HRESULT Mesh::LoadStaticMesh(const std::string& fileName) {
     float x, y, z;
     int v1 = 0, v2 = 0, v3 = 0;
     int vn1 = 0, vn2 = 0, vn3 = 0;
@@ -275,7 +278,7 @@ HRESULT Mesh::LoadStaticMesh(std::string fileName) {
     }
 
     //一時的なメモリ確保（頂点バッファとインデックスバッファ）
-    MY_VERTEX* pvVertexBuffer = new MY_VERTEX[m_dwNumVert];
+    pvVertexBuffer = new MY_VERTEX[m_dwNumVert];
     D3DXVECTOR3* pvCoord = new D3DXVECTOR3[m_dwNumVert];
     D3DXVECTOR3* pvNormal = new D3DXVECTOR3[dwVNCount];
     D3DXVECTOR2* pvTexture = new D3DXVECTOR2[dwVTCount];
@@ -325,6 +328,8 @@ HRESULT Mesh::LoadStaticMesh(std::string fileName) {
     //フェイス　読み込み　バラバラに収録されている可能性があるので、マテリアル名を頼りにつなぎ合わせる
     bool boFlag = false;
     int* piFaceBuffer = new int[m_dwNumFace * 3];//３頂点ポリゴンなので、1フェイス=3頂点(3インデックス)
+    ppiVertexIndex = new int* [m_dwNumMaterial];
+    dwNumFaceInMaterial = new DWORD[m_dwNumMaterial];
     for (DWORD i = 0; i < m_dwNumMaterial; i++) {
         fseek(fp, SEEK_SET, 0);
         dwFCount = 0;
@@ -371,6 +376,7 @@ HRESULT Mesh::LoadStaticMesh(std::string fileName) {
         if (dwFCount == 0)//使用されていないマテリアル対策
         {
             m_ppIndexBuffer[i] = NULL;
+            dwNumFaceInMaterial[i] = NULL;
             continue;
         }
 
@@ -388,6 +394,11 @@ HRESULT Mesh::LoadStaticMesh(std::string fileName) {
         if (FAILED(m_pDevice->CreateBuffer(&bd, &InitData, &m_ppIndexBuffer[i])))
             return FALSE;
         m_pMaterial[i].dwNumFace = dwFCount;
+        //頂点インデックスデータを保存しておく
+        ppiVertexIndex[i] = new int[dwFCount * 3];
+        memcpy(ppiVertexIndex[i], piFaceBuffer, sizeof(int) * dwFCount * 3);
+
+        dwNumFaceInMaterial[i] = dwFCount;
     }
     delete[] piFaceBuffer;
     fclose(fp);
@@ -408,7 +419,6 @@ HRESULT Mesh::LoadStaticMesh(std::string fileName) {
     delete[] pvCoord;
     delete[] pvNormal;
     delete[] pvTexture;
-    delete[] pvVertexBuffer;
 
     //テクスチャー用サンプラー作成
     D3D11_SAMPLER_DESC SamDesc;

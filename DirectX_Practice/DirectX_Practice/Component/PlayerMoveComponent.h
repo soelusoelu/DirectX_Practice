@@ -16,5 +16,6 @@ private:
     bool canMovement();
 
     float mSpeed;
+    const float FALL_SPEED;
     //std::shared_ptr<BoxComponent> mBox;
 };

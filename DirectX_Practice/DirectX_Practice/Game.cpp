@@ -12,11 +12,11 @@ Game::Game() {
 }
 
 Game::~Game() {
-    SingletonFinalizer::finalize();
-
     SAFE_DELETE(mMain);
     SAFE_DELETE(mD3D11);
     SAFE_DELETE(mWindow);
+
+    SingletonFinalizer::finalize();
 }
 
 void Game::run(HINSTANCE hInstance) {

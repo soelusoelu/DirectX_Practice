@@ -5,7 +5,7 @@
 
 GameSystem::GameSystem() :
     mRenderer(std::make_shared<Renderer>()),
-    //mPhysics(std::make_shared<Physics>()),
+    mPhysics(std::make_shared<Physics>()),
     mRandom(std::make_shared<Random>()) {
 }
 
@@ -15,9 +15,9 @@ std::shared_ptr<Renderer> GameSystem::getRenderer() const {
     return mRenderer;
 }
 
-//std::shared_ptr<Physics> GameSystem::getPhysics() const {
-//    return mPhysics;
-//}
+std::shared_ptr<Physics> GameSystem::getPhysics() const {
+    return mPhysics;
+}
 
 std::shared_ptr<Random> GameSystem::getRandom() const {
     return mRandom;

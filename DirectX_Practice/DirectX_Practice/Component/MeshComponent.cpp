@@ -19,6 +19,10 @@ void MeshComponent::draw(Matrix4 world) const {
     }
 }
 
+std::shared_ptr<Mesh> MeshComponent::getMesh() const {
+    return mMesh;
+}
+
 void MeshComponent::setEnable(bool set) {
     mEnabled = set;
 }

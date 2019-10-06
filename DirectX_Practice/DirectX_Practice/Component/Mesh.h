@@ -48,13 +48,26 @@ class Mesh {
 public:
     Mesh();
     ~Mesh();
-    HRESULT Init(std::string fileName);
+    HRESULT Init(const std::string& fileName);
     void Render(D3DXMATRIX world);
+
+    DWORD getNumMaterial() const {
+        return m_dwNumMaterial;
+    }
+    DWORD* getNumFace() const {
+        return dwNumFaceInMaterial;
+    }
+    MY_VERTEX* getVertexBuffer() const {
+        return pvVertexBuffer;
+    }
+    int** getVertexIndex() const {
+        return ppiVertexIndex;
+    }
 
 private:
     HRESULT InitShader();
-    HRESULT LoadMaterialFromFile(std::string fileName, MY_MATERIAL** ppMaterial);
-    HRESULT LoadStaticMesh(std::string fileName);
+    HRESULT LoadMaterialFromFile(const std::string& fileName, MY_MATERIAL** ppMaterial);
+    HRESULT LoadStaticMesh(const std::string& fileName);
 
     ID3D11Device* m_pDevice;
     ID3D11DeviceContext* m_pDeviceContext;
@@ -63,15 +76,17 @@ private:
     DWORD m_dwNumFace;
     ID3D11Buffer* m_pVertexBuffer;
     ID3D11Buffer** m_ppIndexBuffer;
-
     ID3D11InputLayout* m_pVertexLayout;
     ID3D11VertexShader* m_pVertexShader;
     ID3D11PixelShader* m_pPixelShader;
     ID3D11Buffer* m_pConstantBuffer0;
     ID3D11Buffer* m_pConstantBuffer1;
-
     DWORD m_dwNumMaterial;
     MY_MATERIAL* m_pMaterial;
     ID3D11SamplerState* m_pSampleLinear;
     ID3D11ShaderResourceView* m_pTexture;
+
+    MY_VERTEX* pvVertexBuffer;
+    int** ppiVertexIndex;
+    DWORD* dwNumFaceInMaterial;
 };

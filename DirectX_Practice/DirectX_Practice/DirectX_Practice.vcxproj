@@ -130,6 +130,7 @@
     <ClCompile Include="Actor\Actor.cpp" />
     <ClCompile Include="Actor\ActorManager.cpp" />
     <ClCompile Include="Actor\ComponentManagementOfActor.cpp" />
+    <ClCompile Include="Actor\FieldActor.cpp" />
     <ClCompile Include="Actor\PlayerActor.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Component\Component.cpp" />
@@ -149,8 +150,10 @@
     <ClCompile Include="System\Random.cpp" />
     <ClCompile Include="System\Renderer.cpp" />
     <ClCompile Include="UI\Pause.cpp" />
+    <ClCompile Include="UI\Texture.cpp" />
     <ClCompile Include="UI\UI.cpp" />
     <ClCompile Include="UI\UIManager.cpp" />
+    <ClCompile Include="Utility\Collision.cpp" />
     <ClCompile Include="Utility\Input.cpp" />
     <ClCompile Include="Utility\Math.cpp" />
     <ClCompile Include="Utility\Singleton.cpp" />
@@ -160,6 +163,7 @@
     <ClInclude Include="Actor\Actor.h" />
     <ClInclude Include="Actor\ActorManager.h" />
     <ClInclude Include="Actor\ComponentManagementOfActor.h" />
+    <ClInclude Include="Actor\FieldActor.h" />
     <ClInclude Include="Actor\PlayerActor.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Component\Component.h" />
@@ -179,8 +183,10 @@
     <ClInclude Include="System\Random.h" />
     <ClInclude Include="System\Renderer.h" />
     <ClInclude Include="UI\Pause.h" />
+    <ClInclude Include="UI\Texture.h" />
     <ClInclude Include="UI\UI.h" />
     <ClInclude Include="UI\UIManager.h" />
+    <ClInclude Include="Utility\Collision.h" />
     <ClInclude Include="Utility\Input.h" />
     <ClInclude Include="Utility\Math.h" />
     <ClInclude Include="Utility\Singleton.h" />

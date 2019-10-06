@@ -4,13 +4,14 @@
 #include "../Actor/Actor.h"
 #include "../Actor/ComponentManagementOfActor.h"
 #include "../System/GameSystem.h"
-//#include "../System/Physics.h"
-//#include "../Utility/Collision.h"
+#include "../System/Physics.h"
+#include "../Utility/Collision.h"
 #include "../Utility/Input.h"
 
 PlayerMoveComponent::PlayerMoveComponent(Actor* owner, int updateOrder) :
     Component(owner, updateOrder),
-    mSpeed(0.f)/*,
+    mSpeed(0.f),
+    FALL_SPEED(0.1f)/*,
     mBox(nullptr)*/ {
 }
 
@@ -28,6 +29,17 @@ void PlayerMoveComponent::update() {
     if (!Math::nearZero(mSpeed) && canMovement()) {
         mOwner->getTransform()->translete(mOwner->getTransform()->forward() * mSpeed);
     }
+
+    auto s = mOwner->getTransform()->getPosition();
+    Ray ray(s, s + Vector3::down * 50.f);
+    Physics::CollisionInfo collInfo;
+    Vector3 len = Vector3(0.f, -FALL_SPEED, 0.f);
+    if (Singleton<Physics>::instance().rayCast(&ray, &collInfo)) {
+        if (collInfo.mLength < 0.3f) {
+            len.y += FALL_SPEED;
+        }
+    }
+    mOwner->getTransform()->translete(len);
 }
 
 bool PlayerMoveComponent::canMovement() {
