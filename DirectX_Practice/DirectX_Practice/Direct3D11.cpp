@@ -6,16 +6,16 @@ Direct3D11::Direct3D11() {
 }
 
 Direct3D11::~Direct3D11() {
-    SAFE_DELETE(mRasterizerStateBack);
-    SAFE_DELETE(mRasterizerState);
-    //SAFE_DELETE(mBlendState);
-    SAFE_DELETE(mDepthStencilState);
-    SAFE_DELETE(mDepthStencil);
-    SAFE_DELETE(mDepthStencilView);
-    SAFE_DELETE(mRenderTargetView);
-    SAFE_DELETE(mSwapChain);
-    SAFE_DELETE(mDeviceContext);
-    SAFE_DELETE(mDevice);
+    SAFE_RELEASE(mRasterizerStateBack);
+    SAFE_RELEASE(mRasterizerState);
+    //SAFE_RELEASE(mBlendState);
+    SAFE_RELEASE(mDepthStencilState);
+    SAFE_RELEASE(mDepthStencil);
+    SAFE_RELEASE(mDepthStencilView);
+    SAFE_RELEASE(mRenderTargetView);
+    SAFE_RELEASE(mSwapChain);
+    SAFE_RELEASE(mDeviceContext);
+    SAFE_RELEASE(mDevice);
 }
 
 HRESULT Direct3D11::init(D3DInit* pcd) {
