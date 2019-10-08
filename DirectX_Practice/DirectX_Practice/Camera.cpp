@@ -18,12 +18,12 @@ void Camera::update(std::shared_ptr<PlayerActor> player) {
         Vector3 eyeVec = player->getTransform()->forward();
 
         mCameraPosition = Vector3(
-            player->getTransform()->getPosition().x - eyeVec.x * 1.5f,
-            player->getTransform()->getPosition().y + 0.5f,
-            player->getTransform()->getPosition().z - eyeVec.z * 1.5f
+            player->getTransform()->getPosition().x + /*eyeVec.x * */7.f,
+            player->getTransform()->getPosition().y + 2.f,
+            player->getTransform()->getPosition().z - /*eyeVec.z * */5.f
         );
         mPlayerPosition = player->getTransform()->getPosition();
-        mLookAt = Vector3(mPlayerPosition.x, mPlayerPosition.y, mPlayerPosition.z); //注視点
+        mLookAt = Vector3(mPlayerPosition.x, mPlayerPosition.y + 1.5f, mPlayerPosition.z + 3.f); //注視点
     }
 
     D3DXMatrixLookAtLH(&mView, &mCameraPosition.toD3DXVECTOR3(), &mLookAt.toD3DXVECTOR3(), &mUp.toD3DXVECTOR3());

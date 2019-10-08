@@ -34,7 +34,7 @@ void Input::update() {
 }
 
 bool Input::getKeyDown(KeyCode key) {
-    return (mCurrentKeys[key] & 0x80 && mPreviousKeys[key] & 0x80);
+    return (mCurrentKeys[key] & 0x80 && !(mPreviousKeys[key] & 0x80));
 }
 
 bool Input::getKey(KeyCode key) {
@@ -42,7 +42,7 @@ bool Input::getKey(KeyCode key) {
 }
 
 bool Input::getKeyUp(KeyCode key) {
-    return (mCurrentKeys[key] & 0x80 && mPreviousKeys[key] & 0x80);
+    return (!(mCurrentKeys[key] & 0x80) && mPreviousKeys[key] & 0x80);
 }
 
 int Input::horizontal() {

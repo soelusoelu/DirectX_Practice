@@ -87,6 +87,11 @@ const Vector3& TransformComponent::getScale() const {
     return mScale;
 }
 
+void TransformComponent::setScale(float scale) {
+    mScale = Vector3(scale, scale, scale);
+    mRecomputeTransform = true;
+}
+
 void TransformComponent::setScale(const Vector3& scale) {
     mScale = scale;
     mRecomputeTransform = true;

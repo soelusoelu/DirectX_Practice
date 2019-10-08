@@ -27,9 +27,9 @@ void GamePlay::update() {
     if (mState == GameState::Play) {
         Singleton<ActorManager>::instance().update();
 
-        if (Input::getKeyDown(Input::KeyCode::Space)) {
-            new Pause(this);
-        }
+        //if (Input::getKeyDown(Input::KeyCode::Space)) {
+        //    new Pause(this);
+        //}
     }
 
     //UIは最後に必ず

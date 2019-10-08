@@ -25,6 +25,7 @@ public:
 
     //拡縮
     const Vector3& getScale() const;
+    void setScale(float scale);
     void setScale(const Vector3& scale);
 
     //向き
