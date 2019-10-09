@@ -7,7 +7,7 @@
 #include <memory>
 
 class GamePlay;
-class BoxComponent;
+class SphereCollisionComponent;
 class Actor;
 
 class Physics {
@@ -25,19 +25,19 @@ public:
     };
 
     bool rayCast(Ray* ray, CollisionInfo* outColl);
-//    //総当たり判定
-//    void sweepAndPrune(std::function<void(Actor*, Actor*)> f);
-//
-//    //ボックスコンポーネントの追加・削除
-//    void addBox(BoxComponent* box);
-//    void removeBox(BoxComponent* box);
-//
-//    //全当たり判定の取得
-//    const std::vector<BoxComponent*>& getBoxes() const;
-//
+    //総当たり判定
+    void sweepAndPrune(std::function<void(Actor*, Actor*)> f);
+
+    //ボックスコンポーネントの追加・削除
+    void addSphere(SphereCollisionComponent* sphere);
+    void removeSphere(SphereCollisionComponent* sphere);
+
+    void hit();
+
 private:
     void calcPlane(D3DXPLANE* plane, D3DXVECTOR3* a, D3DXVECTOR3* b, D3DXVECTOR3* c);
-    bool intersect(D3DXPLANE plane, Ray* ray, D3DXVECTOR3 v1, D3DXVECTOR3 v2, D3DXVECTOR3 v3, CollisionInfo* outColl);
+    bool Intersect(D3DXPLANE plane, Ray* ray, D3DXVECTOR3 v1, D3DXVECTOR3 v2, D3DXVECTOR3 v3, CollisionInfo* outColl);
     bool isInside(D3DXVECTOR3* intersect, D3DXVECTOR3* a, D3DXVECTOR3* b, D3DXVECTOR3* c);
-//    std::vector<BoxComponent*> mBoxes;
+
+    std::vector<SphereCollisionComponent*> mSpheres;
 };

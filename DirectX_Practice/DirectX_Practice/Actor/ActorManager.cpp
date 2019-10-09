@@ -48,6 +48,11 @@ void ActorManager::addActor(Actor* actor) {
 void ActorManager::clear() {
     mPendingActors.clear();
     mActors.clear();
+    mFieldActors.clear();
+}
+
+std::unordered_set<std::shared_ptr<Actor>> ActorManager::getActors() const {
+    return mActors;
 }
 
 std::unordered_set<std::shared_ptr<Actor>> ActorManager::getFields() const {

@@ -19,6 +19,8 @@ public:
     //所有アクターをすべて削除
     void clear();
 
+    //全アクターの取得
+    std::unordered_set<std::shared_ptr<Actor>> getActors() const;
     //全地形の取得
     std::unordered_set<std::shared_ptr<Actor>> getFields() const;
     //アクター配列の中からプレイヤーを取得

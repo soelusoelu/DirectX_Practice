@@ -1,13 +1,16 @@
 ﻿#include "GamePlay.h"
 #include "../Actor/ActorManager.h"
+#include "../Actor/EnemyActor.h"
 #include "../Actor/FieldActor.h"
 #include "../Actor/PlayerActor.h"
 #include "../Camera.h"
 #include "../Component/TransformComponent.h"
 #include "../System/GameSystem.h"
+#include "../System/Physics.h"
 #include "../UI/Pause.h"
 #include "../UI/UIManager.h"
 #include "../Utility/Input.h"
+#include "../Utility/Collision.h"
 
 GamePlay::GamePlay() :
     SceneBase(),
@@ -15,6 +18,8 @@ GamePlay::GamePlay() :
     auto p = Actor::instantiate<PlayerActor>();
     p->getTransform()->setPosition(Vector3(0.f, 10.f, 0.f));
     Actor::instantiate<FieldActor>();
+    auto e = Actor::instantiate<EnemyActor>();
+    e->getTransform()->setPosition(Vector3(0.f, 0.3f, 2.f));
 }
 
 GamePlay::~GamePlay() {
@@ -31,6 +36,8 @@ void GamePlay::update() {
         //    new Pause(this);
         //}
     }
+
+    Singleton<GameSystem>::instance().getPhysics()->hit();
 
     //UIは最後に必ず
     Singleton<UIManager>::instance().update();

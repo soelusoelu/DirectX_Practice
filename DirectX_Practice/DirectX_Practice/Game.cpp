@@ -138,6 +138,8 @@ void Game::fixFPS60() {
     previousTime = currentTime;
 }
 
+
+
 void initDirectory(WCHAR* root) {
     wcsncpy_s(szRootPath, root, wcslen(root));
 }

@@ -1,10 +1,8 @@
 ﻿#pragma once
 
 #include "Component.h"
-#include <memory>
 
 class Actor;
-class BoxComponent;
 
 class PlayerMoveComponent : public Component {
     enum State {
@@ -25,5 +23,4 @@ private:
     float mBreakPower;
     const float FALL_SPEED;
     State mState;
-    //std::shared_ptr<BoxComponent> mBox;
 };

@@ -31,6 +31,8 @@ public:
 
     static ID3D11Device* mDevice;
     static ID3D11DeviceContext* mDeviceContext;
+    static ID3D11RasterizerState* mRasterizerState; //‘O–Ê—p
+    static ID3D11RasterizerState* mRasterizerStateBack; //”w–Ê—p
 
 private:
     HWND mHwnd;
@@ -39,8 +41,5 @@ private:
     ID3D11DepthStencilView* mDepthStencilView;
     ID3D11Texture2D* mDepthStencil;
     ID3D11DepthStencilState* mDepthStencilState;
-    //ID3D11BlendState* mBlendState;
-    ID3D11RasterizerState* mRasterizerState;
-    ID3D11RasterizerState* mRasterizerStateBack;
 };
 

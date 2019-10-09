@@ -14,8 +14,7 @@ PlayerMoveComponent::PlayerMoveComponent(Actor* owner, int updateOrder) :
     mJumpPower(0.f),
     mBreakPower(0.f),
     mState(State::FlyingDown),
-    FALL_SPEED(0.15f)/*,
-    mBox(nullptr)*/ {
+    FALL_SPEED(0.15f) {
 }
 
 void PlayerMoveComponent::start() {
@@ -23,15 +22,15 @@ void PlayerMoveComponent::start() {
 }
 
 void PlayerMoveComponent::update() {
-    //float rotation = Input::horizontal();
-    //if (!Math::nearZero(rotation)) {
-    //    mOwner->getTransform()->rotate(Vector3::up, rotation);
-    //}
+    float rotation = Input::horizontal();
+    if (!Math::nearZero(rotation)) {
+        mOwner->getTransform()->rotate(Vector3::up, rotation);
+    }
 
-    //mSpeed = Input::vertical() * 0.05f;
-    //if (!Math::nearZero(mSpeed) && canMovement()) {
-    //    mOwner->getTransform()->translete(mOwner->getTransform()->forward() * mSpeed);
-    //}
+    mSpeed = Input::vertical() * 0.05f;
+    if (!Math::nearZero(mSpeed) && canMovement()) {
+        mOwner->getTransform()->translete(mOwner->getTransform()->forward() * mSpeed);
+    }
 
     //回転移動
     //if (Input::getKey(Input::KeyCode::Space)) {
@@ -41,24 +40,24 @@ void PlayerMoveComponent::update() {
     //}
 
     //ジャンプ
-    if (Input::getKey(Input::KeyCode::Space) && mState == State::OnGround) {
-        mJumpPower += 0.02f;
-        mJumpPower = Math::Min<float>(mJumpPower, 0.5f);
-        mSpeed -= 0.01f;
-        if (mSpeed <= 0.f) {
-            mSpeed = 0.f;
-        }
-    } else if (Input::getKeyUp(Input::KeyCode::Space)) {
-        mState = State::FlyingUp;
-        //auto pos = mOwner->getTransform()->getPosition();
-        //pos.y += mJumpPower;
-        //mOwner->getTransform()->setPosition(pos);
-        //mJumpPower = 0.f;
-    } else {
-        //mOwner->getTransform()->translete(mOwner->getTransform()->forward() * 0.2f);
-        mSpeed = 0.3f;
-    }
-    mOwner->getTransform()->translete(mOwner->getTransform()->forward() * mSpeed);
+    //if (Input::getKey(Input::KeyCode::Space) && mState == State::OnGround) {
+    //    mJumpPower += 0.02f;
+    //    mJumpPower = Math::Min<float>(mJumpPower, 0.5f);
+    //    mSpeed -= 0.01f;
+    //    if (mSpeed <= 0.f) {
+    //        mSpeed = 0.f;
+    //    }
+    //} else if (Input::getKeyUp(Input::KeyCode::Space)) {
+    //    mState = State::FlyingUp;
+    //    //auto pos = mOwner->getTransform()->getPosition();
+    //    //pos.y += mJumpPower;
+    //    //mOwner->getTransform()->setPosition(pos);
+    //    //mJumpPower = 0.f;
+    //} else {
+    //    //mOwner->getTransform()->translete(mOwner->getTransform()->forward() * 0.2f);
+    //    mSpeed = 0.3f;
+    //}
+    //mOwner->getTransform()->translete(mOwner->getTransform()->forward() * mSpeed);
 
     if (mState == State::FlyingUp) {
         mJumpPower -= 0.03f;

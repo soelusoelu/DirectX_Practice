@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../DirectXIncLib.h"
+#include "../Utility/Collision.h"
+#include <memory>
 #include <stdio.h>
 #include <string>
 
@@ -26,6 +28,7 @@ struct SIMPLESHADER_CONSTANT_BUFFER1 {
     D3DXVECTOR4 vAmbient;//アンビエント光
     D3DXVECTOR4 vDiffuse;//ディフューズ色
     D3DXVECTOR4 vSpecular;//鏡面反射
+    D3DXVECTOR4 vTexture;//テクスチャーが貼られているメッシュかどうかのフラグ
 };
 //オリジナル　マテリアル構造体
 struct MY_MATERIAL {
@@ -49,7 +52,8 @@ public:
     Mesh();
     ~Mesh();
     HRESULT Init(const std::string& fileName);
-    void Render(D3DXMATRIX world);
+    void draw(D3DXMATRIX world, float alpha) const;
+    void createSphere(Sphere* sphere) const;
 
     DWORD getNumMaterial() const {
         return m_dwNumMaterial;
@@ -68,9 +72,12 @@ private:
     HRESULT InitShader();
     HRESULT LoadMaterialFromFile(const std::string& fileName, MY_MATERIAL** ppMaterial);
     HRESULT LoadStaticMesh(const std::string& fileName);
+    void RendererMesh(D3DXMATRIX world, float alpha) const;
 
     ID3D11Device* m_pDevice;
     ID3D11DeviceContext* m_pDeviceContext;
+    ID3D11RasterizerState* mRasterizerState;
+    ID3D11RasterizerState* mRasterizerStateBack;
 
     DWORD m_dwNumVert;
     DWORD m_dwNumFace;
@@ -85,8 +92,12 @@ private:
     MY_MATERIAL* m_pMaterial;
     ID3D11SamplerState* m_pSampleLinear;
     ID3D11ShaderResourceView* m_pTexture;
+    ID3D11BlendState* mBlendState; //アルファブレンディング
 
     MY_VERTEX* pvVertexBuffer;
     int** ppiVertexIndex;
     DWORD* dwNumFaceInMaterial;
+
+    D3DXVECTOR3* mCoord;
+
 };

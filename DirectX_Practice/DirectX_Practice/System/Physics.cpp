@@ -4,8 +4,9 @@
 #include "../Actor/ActorManager.h"
 #include "../Component/Mesh.h"
 #include "../Component/MeshComponent.h"
-//#include "../Component/Collider/BoxComponent.h"
-//#include <algorithm>
+#include "../Component/SphereCollisionComponent.h"
+#include "../Utility/Collision.h"
+#include <algorithm>
 
 bool Physics::rayCast(Ray* ray, CollisionInfo* outColl) {
     bool collided = false;
@@ -29,7 +30,7 @@ bool Physics::rayCast(Ray* ray, CollisionInfo* outColl) {
                 D3DXPLANE plane;
                 calcPlane(&plane, &v1, &v2, &v3);
                 //平面とレイの交差を検出
-                if (intersect(plane, ray, v1, v2, v3, outColl)) {
+                if (Intersect(plane, ray, v1, v2, v3, outColl)) {
                     collided = true;
                     if (minLength > outColl->mLength) {
                         normal.x = plane.a;//平面方程式の係数は面法線
@@ -63,7 +64,7 @@ void Physics::calcPlane(D3DXPLANE* plane, D3DXVECTOR3* a, D3DXVECTOR3* b, D3DXVE
     plane->d = -(plane->a * a->x + plane->b * a->y + plane->c * a->z);
 }
 
-bool Physics::intersect(D3DXPLANE plane, Ray* ray, D3DXVECTOR3 v1, D3DXVECTOR3 v2, D3DXVECTOR3 v3, CollisionInfo* outColl) {
+bool Physics::Intersect(D3DXPLANE plane, Ray* ray, D3DXVECTOR3 v1, D3DXVECTOR3 v2, D3DXVECTOR3 v3, CollisionInfo* outColl) {
     //パラメトリック方程式の媒介変数” t "を解く。
     float t = -((plane.a * ray->mEnd.x) + (plane.b * ray->mEnd.y) + (plane.c * ray->mEnd.z) + plane.d) /
         (((plane.a * ray->mStart.x) + (plane.b * ray->mStart.y) + (plane.c * ray->mStart.z)) - ((plane.a * ray->mEnd.x) + (plane.b * ray->mEnd.y) + (plane.c * ray->mEnd.z)));
@@ -130,48 +131,55 @@ bool Physics::isInside(D3DXVECTOR3* intersect, D3DXVECTOR3* a, D3DXVECTOR3* b, D
     return false;
 }
 
-//void Physics::sweepAndPrune(std::function<void(Actor*, Actor*)> f) {
-//    //min.xが小さい順にソート
-//    std::sort(mBoxes.begin(), mBoxes.end(),
-//        [](BoxComponent* a, BoxComponent* b) {
-//            return a->getCollision().mMin.x < b->getCollision().mMin.x;
-//        });
-//
-//    for (size_t i = 0; i < mBoxes.size(); i++) {
-//        //mBoxes[i]のmax.xを取得
-//        BoxComponent* a = mBoxes[i];
-//        if (!a->getEnable()) {
-//            break;
-//        }
-//        float max = a->getCollision().mMax.x;
-//        for (size_t j = i + 1; j < mBoxes.size(); j++) {
-//            BoxComponent* b = mBoxes[j];
-//            if (!b->getEnable()) {
-//                break;
-//            }
-//            //もしmBoxes[j]のmin.xが、mBoxes[i]のmax.x境界を超えていたら、
-//            //mBoxes[i]と交差する可能性があるボックスは存在しない
-//            if (b->getCollision().mMin.x > max) {
-//                break;
-//            } else if (intersect(a->getCollision(), b->getCollision())) {
-//                f(a->getOwner(), b->getOwner());
-//            }
-//        }
-//    }
-//}
-//
-//void Physics::addBox(BoxComponent* box) {
-//    mBoxes.emplace_back(box);
-//}
-//
-//void Physics::removeBox(BoxComponent* box) {
-//    auto itr = std::find(mBoxes.begin(), mBoxes.end(), box);
-//    if (itr != mBoxes.end()) {
-//        std::iter_swap(itr, mBoxes.end() - 1);
-//        mBoxes.pop_back();
-//    }
-//}
-//
-//const std::vector<BoxComponent*>& Physics::getBoxes() const {
-//    return mBoxes;
-//}
+void Physics::sweepAndPrune(std::function<void(Actor*, Actor*)> f) {
+    //min.xが小さい順にソート
+    //std::sort(mSpheres.begin(), mSpheres.end(),
+    //    [](SphereCollisionComponent* a, SphereCollisionComponent* b) {
+    //        return a->getCollision().mMin.x < b->getCollision().mMin.x;
+    //    });
+
+    //for (size_t i = 0; i < mSpheres.size(); i++) {
+    //    //mBoxes[i]のmax.xを取得
+    //    SphereCollisionComponent* a = mSpheres[i];
+    //    if (!a->getEnable()) {
+    //        break;
+    //    }
+    //    float max = a->getCollision().mMax.x;
+    //    for (size_t j = i + 1; j < mSpheres.size(); j++) {
+    //        SphereCollisionComponent* b = mSpheres[j];
+    //        if (!b->getEnable()) {
+    //            break;
+    //        }
+    //        //もしmBoxes[j]のmin.xが、mBoxes[i]のmax.x境界を超えていたら、
+    //        //mBoxes[i]と交差する可能性があるボックスは存在しない
+    //        if (b->getCollision().mMin.x > max) {
+    //            break;
+    //        } else if (intersect(a->getCollision(), b->getCollision())) {
+    //            f(a->getOwner(), b->getOwner());
+    //        }
+    //    }
+    //}
+}
+
+void Physics::addSphere(SphereCollisionComponent* sphere) {
+    mSpheres.emplace_back(sphere);
+}
+
+void Physics::removeSphere(SphereCollisionComponent* sphere) {
+    auto itr = std::find(mSpheres.begin(), mSpheres.end(), sphere);
+    if (itr != mSpheres.end()) {
+        std::iter_swap(itr, mSpheres.end() - 1);
+        mSpheres.pop_back();
+    }
+}
+
+void Physics::hit() {
+    static bool first = true;
+    if (mSpheres.size() <= 1 || first) {
+        first = false;
+        return;
+    }
+    if (intersect(mSpheres[0]->getSphere(), mSpheres[1]->getSphere())) {
+        Actor::destroy(mSpheres[1]->getOwner());
+    }
+}

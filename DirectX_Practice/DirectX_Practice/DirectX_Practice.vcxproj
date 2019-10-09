@@ -130,6 +130,7 @@
     <ClCompile Include="Actor\Actor.cpp" />
     <ClCompile Include="Actor\ActorManager.cpp" />
     <ClCompile Include="Actor\ComponentManagementOfActor.cpp" />
+    <ClCompile Include="Actor\EnemyActor.cpp" />
     <ClCompile Include="Actor\FieldActor.cpp" />
     <ClCompile Include="Actor\PlayerActor.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -137,6 +138,7 @@
     <ClCompile Include="Component\Mesh.cpp" />
     <ClCompile Include="Component\MeshComponent.cpp" />
     <ClCompile Include="Component\PlayerMoveComponent.cpp" />
+    <ClCompile Include="Component\SphereCollisionComponent.cpp" />
     <ClCompile Include="Component\TransformComponent.cpp" />
     <ClCompile Include="Direct3D11.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -163,6 +165,7 @@
     <ClInclude Include="Actor\Actor.h" />
     <ClInclude Include="Actor\ActorManager.h" />
     <ClInclude Include="Actor\ComponentManagementOfActor.h" />
+    <ClInclude Include="Actor\EnemyActor.h" />
     <ClInclude Include="Actor\FieldActor.h" />
     <ClInclude Include="Actor\PlayerActor.h" />
     <ClInclude Include="Camera.h" />
@@ -170,6 +173,7 @@
     <ClInclude Include="Component\Mesh.h" />
     <ClInclude Include="Component\MeshComponent.h" />
     <ClInclude Include="Component\PlayerMoveComponent.h" />
+    <ClInclude Include="Component\SphereCollisionComponent.h" />
     <ClInclude Include="Component\TransformComponent.h" />
     <ClInclude Include="Direct3D11.h" />
     <ClInclude Include="DirectXIncLib.h" />

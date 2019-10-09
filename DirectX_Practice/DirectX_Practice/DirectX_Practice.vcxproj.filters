@@ -82,6 +82,12 @@
     <ClCompile Include="Utility\Collision.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
+    <ClCompile Include="Component\SphereCollisionComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\EnemyActor.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -164,6 +170,12 @@
     </ClInclude>
     <ClInclude Include="Utility\Collision.h">
       <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\SphereCollisionComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\EnemyActor.h">
+      <Filter>Actor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

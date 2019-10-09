@@ -8,12 +8,13 @@ Direct3D11::Direct3D11() {
 Direct3D11::~Direct3D11() {
     SAFE_RELEASE(mRasterizerStateBack);
     SAFE_RELEASE(mRasterizerState);
-    //SAFE_RELEASE(mBlendState);
     SAFE_RELEASE(mDepthStencilState);
     SAFE_RELEASE(mDepthStencil);
     SAFE_RELEASE(mDepthStencilView);
     SAFE_RELEASE(mRenderTargetView);
     SAFE_RELEASE(mSwapChain);
+    SAFE_RELEASE(mRasterizerState);
+    SAFE_RELEASE(mRasterizerStateBack);
     SAFE_RELEASE(mDeviceContext);
     SAFE_RELEASE(mDevice);
 }
@@ -94,7 +95,6 @@ HRESULT Direct3D11::init(D3DInit* pcd) {
     rdc.CullMode = D3D11_CULL_FRONT;
     rdc.FillMode = D3D11_FILL_SOLID;
 
-
     mDevice->CreateRasterizerState(&rdc, &mRasterizerState);
 
     rdc.CullMode = D3D11_CULL_BACK;
@@ -119,3 +119,5 @@ HRESULT Direct3D11::present() {
 
 ID3D11Device* Direct3D11::mDevice = nullptr;
 ID3D11DeviceContext* Direct3D11::mDeviceContext = nullptr;
+ID3D11RasterizerState* Direct3D11::mRasterizerState = nullptr;
+ID3D11RasterizerState* Direct3D11::mRasterizerStateBack = nullptr;
